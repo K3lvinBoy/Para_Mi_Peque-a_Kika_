@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Especial para Ti</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+    --primario: #ffffff;
+    --fondo: #f6f6f6;
+
+    /* COLOR DEL SOBRE */
+    --fondo-sobre: #861043;
+    --solapa-sobre: #6f0d36;
+    --cuerpo-sobre: #4D0218;
+
+    --sombra: rgba(0, 0, 0, 0.25);
+
+    --texto: #020618;
+    --dorado: #d4af37;
+    --rojo: #b11226;
+}
+
+
+        body {
+            background: var(--fondo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-family: "Pacifico", cursive;
+            font-size: 44px;
+            margin-bottom: 30px;
+            color: #020618;
+        }
+
+        .contenedor {
+            width: 400px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .envoltura-sobre {
+            position: relative;
+            background-color: var(--fondo-sobre);
+            box-shadow: 0 15px 40px var(--sombra);
+            border-radius: 12px;
+        }
+
+        .sobre {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            cursor: pointer;
+        }
+
+        .sobre::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 4;
+            border-top: 180px solid var(--solapa-sobre);
+            border-right: 200px solid transparent;
+            border-left: 200px solid transparent;
+            transform-origin: top;
+            transition: all 0.5s ease-in-out 0.7s;
+            border-radius: 12px;
+        }
+
+        .solapa-derecha,
+        .solapa-izquierda {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: var(--cuerpo-sobre);
+            border-radius: 12px;
+        }
+
+        .solapa-derecha {
+            clip-path: polygon(100% 0, 0 100%, 100% 100%);
+        }
+
+        .solapa-izquierda {
+            clip-path: polygon(0 0, 0 100%, 100% 100%);
+        }
+
+        .carta {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primario);
+            box-shadow: 0 10px 30px var(--sombra);
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .contenido {
+            font-family: "Georgia", serif;
+            color: var(--texto);
+            text-align: left;
+            font-size: 16px;
+            border: 2px dashed var(--dorado);
+            padding: 15px;
+            height: 100%;
+            line-height: 1.6;
+            overflow-y: auto;
+            background: #fffdf7;
+        }
+
+        .contenido strong {
+            color: var(--rojo);
+        }
+
+        .spider-sello {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 45px;
+            transform: translate(-50%, -50%);
+            z-index: 999;
+            cursor: pointer;
+            transition: transform 0.5s ease-in-out 1s;
+        }
+
+        .abierto .sobre::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .abierto .spider-sello {
+            transform: translate(-50%, -50%) rotate(90deg);
+        }
+
+        .carta.mostrar-carta {
+            transform: translateY(-290px);
+        }
+
+        .carta.cerrando-carta {
+            transform: translateY(-290px);
+        }
+
+        .carta.abierta {
+            z-index: 10000;
+        }
+
+        .envoltura-sobre.desactivar-sobre .sobre::before {
+            pointer-events: none;
+        }
+
+        /* ❄️ NIEVE ❄️ */
+        .nieve {
+            position: fixed;
+            top: -10px;
+            opacity: 0.8;
+            animation: caer linear infinite;
+            pointer-events: none;
+            z-index: 1;
+            user-select: none;
+        }
+
+        @keyframes caer {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        /* 📱 RESPONSIVE PARA CELULARES */
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+        height: auto;
+    }
+
+    h1 {
+        font-size: 30px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .contenedor {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .sobre {
+        width: 320px;
+        height: 240px;
+    }
+
+    .envoltura-sobre {
+        border-radius: 10px;
+    }
+
+    .sobre::before {
+        border-top: 140px solid var(--solapa-sobre);
+        border-right: 160px solid transparent;
+        border-left: 160px solid transparent;
+    }
+
+    .carta {
+        padding: 12px;
+    }
+
+    .contenido {
+        font-size: 14px;
+        padding: 12px;
+        line-height: 1.5;
+    }
+
+    .spider-sello {
+        width: 35px;
+    }
+
+    /* Ajuste de subida de carta */
+    .carta.mostrar-carta,
+    .carta.cerrando-carta {
+        transform: translateY(-230px);
+    }
+}
+/* 📱 RESPONSIVE PARA CELULARES */
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 30px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .contenedor {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .sobre {
+        width: 320px;
+        height: 240px;
+    }
+
+    .sobre::before {
+        border-top: 140px solid var(--solapa-sobre);
+        border-right: 160px solid transparent;
+        border-left: 160px solid transparent;
+    }
+
+    .carta {
+        padding: 12px;
+    }
+
+    .contenido {
+        font-size: 14px;
+        padding: 12px;
+        line-height: 1.5;
+    }
+
+    .spider-sello {
+        width: 35px;
+    }
+
+    .carta.mostrar-carta,
+    .carta.cerrando-carta {
+        transform: translateY(-230px);
+    }
+}
+
+.imagen-final {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.imagen-final img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+    </style>
+</head>
+
+<body>
+
+<h1><em>"Para mi pequeña kika"</em></h1>
+
+
+<div class="contenedor">
+    <div class="envoltura-sobre">
+        <div class="sobre">
+            <div class="solapa-derecha"></div>
+            <div class="solapa-izquierda"></div>
+            <img src="spider-removebg-preview.png" class="spider-sello">
+        </div>
+
+        <div class="carta">
+            <div class="contenido">
+                <p>
+                    <strong>Querida Ericka,</strong><br><br>
+
+                    Hoy, en esta <strong>Navidad tan especial</strong>, mi corazón no puede hacer otra cosa que agradecer por ti...<br><br>
+
+                    Agradecer por <strong>tu vida</strong>, por <strong>tu amor</strong>, por <strong>tu presencia constante en la mía</strong>.
+                    Gracias por permitirnos tener <strong>nuestra primera Navidad juntos</strong>, por permitirnos amarnos, crecer y construir
+                    recuerdos que <strong>vivirán para siempre en mi corazón</strong>...<br><br>
+
+                    Te amo por quien eres cuando nadie más está mirando.
+                    Por tu forma de hablar, de reír, de amar...
+                    Te amo por <strong>tu paciencia cuando yo no soy fácil</strong>, por <strong>tu comprensión en mis silencios</strong>,
+                    por <strong>tu apoyo cuando el mundo pesa más de lo normal</strong>...
+                    Te amo por tus virtudes y también por tus imperfecciones
+                    <em>(pero para mí tú eres perfecta)</em>, porque incluso en ellas encuentro belleza.
+                    Te amo porque eres <strong>humana, real y maravillosa</strong>...<br><br>
+
+                    Te amo por la manera en que haces que <strong>los días simples se vuelvan especiales</strong>,
+                    por cómo una conversación contigo puede cambiar por completo mi ánimo,
+                    por cómo <strong>tu voz puede traerme paz incluso en medio del caos</strong>...
+                    Te amo porque contigo aprendí que el amor no siempre es perfecto,
+                    pero sí <strong>verdadero</strong>...<br><br>
+
+                    Gracias por cada recuerdo que hemos creado:
+                    por <strong>las risas que nos hicieron olvidar el tiempo</strong>,
+                    por <strong>los momentos difíciles que nos unieron más</strong>,
+                    por cada lágrima que limpiamos juntos y por cada sueño que aún guardamos con ilusión...
+                    Cada etapa contigo ha sido una lección,
+                    <strong>cada abrazo un refugio</strong>,
+                    <strong>cada beso una promesa silenciosa</strong>...<br><br>
+
+                    Gracias por <strong>elegirme todos los días</strong>, incluso cuando es más fácil rendirse.
+                    Gracias por amarme incluso cuando <strong>no soy fácil de amar</strong>...
+                    Gracias por quedarte cuando otros se van
+                    y por creer en nosotros aun cuando el camino no es claro...<br><br>
+
+                    Hoy quiero recibir esta Navidad contigo.
+                    Quiero <strong>más metas compartidas</strong>,
+                    más conversaciones profundas,
+                    más momentos sencillos que se vuelven inolvidables solo porque estás tú...
+                    Quiero aprender contigo, caer contigo y levantarme contigo.
+                    Quiero crecer a tu lado,
+                    <strong>no solo como pareja, sino como persona</strong>...<br><br>
+
+                    No prometo que todo será perfecto,
+                    pero sí te prometo <strong>amor sincero</strong>,
+                    <strong>respeto</strong>,
+                    <strong>lealtad</strong>
+                    y un corazón que <strong>siempre será tuyo</strong>...
+                    Te prometo tomar tu mano en los días buenos
+                    y abrazarte más fuerte en los días difíciles.
+                    Te prometo caminar contigo,
+                    <strong>no delante ni detrás, sino a tu lado</strong>...<br><br>
+
+                    Mi amor por ti no es pasajero,
+                    no es frágil,
+                    no es vacío.
+                    Es un amor que <strong>se construye</strong>,
+                    que <strong>lucha</strong>,
+                    que <strong>permanece</strong>...
+                    Es un amor que no depende de los días fáciles,
+                    sino que <strong>se fortalece en los días difíciles</strong>...
+                    Gracias por ser <strong>mi calma</strong>,
+                    <strong>mi fuerza</strong>,
+                    <strong>mi alegría</strong>
+                    y <strong>mi hogar</strong>.
+                    Gracias por ser <strong>el regalo más bonito que me ha dado la vida</strong>...<br><br>
+
+                    Esta Navidad no solo celebro una fecha,
+                    <strong>celebro tenerte</strong>.
+                    Celebro <strong>nuestra historia</strong>.<br><br>
+
+                    Celebro que seguimos aquí,
+                    <strong>juntos</strong>,
+                    soñando,
+                    amando
+                    y creyendo...
+                    <strong>Te amo hoy más que ayer y menos que mañana.</strong><br><br>
+
+                    <strong>Feliz Navidad, mi pequeña kika.</strong><br><br>
+
+                    <strong>ATTE Kevin</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<audio id="musica" loop>
+    <source src="liana.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    const envoltura = document.querySelector(".envoltura-sobre");
+    const carta = document.querySelector(".carta");
+    const musica = document.getElementById("musica");
+
+    let abierto = false;
+
+    document.addEventListener("click", (e) => {
+
+        /* ABRIR SOBRE */
+        if (
+            !abierto &&
+            (
+                e.target.matches(".sobre") ||
+                e.target.matches(".solapa-derecha") ||
+                e.target.matches(".solapa-izquierda") ||
+                e.target.matches(".spider-sello")
+            )
+        ) {
+            musica.play().catch(() => {});
+
+            envoltura.classList.add("abierto");
+            envoltura.classList.add("desactivar-sobre");
+
+            setTimeout(() => {
+                carta.style.display = "block";
+                carta.classList.add("mostrar-carta");
+
+                setTimeout(() => {
+                    carta.classList.remove("mostrar-carta");
+                    carta.classList.add("abierta");
+                    abierto = true;
+                }, 500);
+            }, 1000);
+        }
+
+        /* CERRAR CARTA Y SOBRE */
+        else if (abierto) {
+            carta.classList.add("cerrando-carta");
+
+            setTimeout(() => {
+                carta.classList.remove("cerrando-carta");
+                carta.classList.remove("abierta");
+                carta.style.display = "none";
+
+                envoltura.classList.remove("abierto");
+                envoltura.classList.remove("desactivar-sobre");
+
+                abierto = false;
+            }, 500);
+        }
+    });
+
+    /* ❄️ NIEVE ❄️ */
+    const copos = ["❄", "❅", "❆"];
+
+    function crearNieve() {
+        const nieve = document.createElement("div");
+        nieve.className = "nieve";
+        nieve.innerHTML = copos[Math.floor(Math.random() * copos.length)];
+        nieve.style.left = Math.random() * window.innerWidth + "px";
+        nieve.style.animationDuration = 12 + Math.random() * 8 + "s";
+        nieve.style.fontSize = 8 + Math.random() * 8 + "px";
+        document.body.appendChild(nieve);
+
+        setTimeout(() => nieve.remove(), 20000);
+    }
+
+    setInterval(crearNieve, 600);
+</script>
+
+
+<div class="imagen-final">
+    <img src="snoopy-removebg-preview.png" alt="Navidad juntos">
+</div>
+
+
+
+</body>
+</html>
